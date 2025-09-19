@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Timestamp Microservice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>⏱ Timestamp Microservice</h1>
+      <p>Convert between Unix timestamps and UTC dates</p>
+    </header>
+
+    <main>
+      <div class="input-box">
+        <input 
+          type="text" 
+          id="dateInput" 
+          placeholder="Enter a date (e.g., 2015-12-25 or 1451001600000)">
+        <button id="fetchBtn">Convert</button>
+        <button id="clearBtn" class="secondary">Clear</button>
+      </div>
+
+      <div class="result-box">
+        <h2>Result</h2>
+        <pre id="output">Waiting for input...</pre>
+      </div>
+
+      <div class="examples">
+        <h3>Examples:</h3>
+        <ul>
+          <li><a href="/api/2015-12-25" target="_blank">/api/2015-12-25</a></li>
+          <li><a href="/api/1451001600000" target="_blank">/api/1451001600000</a></li>
+          <li><a href="/api" target="_blank">/api (current time)</a></li>
+        </ul>
+      </div>
+    </main>
+
+    <footer>
+      <p>Made by theProf ck</p>
+    </footer>
+  </div>
+
+  <script>
+    const input = document.getElementById("dateInput");
+    const output = document.getElementById("output");
+    const fetchBtn = document.getElementById("fetchBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    fetchBtn.addEventListener("click", async () => {
+      const value = input.value.trim();
+      const url = value ? `/api/${value}` : "/api";
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        output.textContent = "❌ Error fetching data";
+      }
+    });
+
+    clearBtn.addEventListener("click", () => {
+      input.value = "";
+      output.textContent = "Waiting for input...";
+    });
+  </script>
+</body>
+</html>
